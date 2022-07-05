@@ -18,7 +18,7 @@ class test_add_group(unittest.TestCase):
         self.wd.implicitly_wait(30)
 
     def open_home_page(self, wd):
-        wd.get("http://localhost/addressbook/group.php")
+        wd.get("http://localhost/addressbook/")
 
     def login(self, wd, username, password):
         wd.find_element_by_name("user").click()
