@@ -22,6 +22,7 @@ class test_add_contact(unittest.TestCase):
         wd.get("http://localhost/addressbook/")
 
     def login(self, wd, username, password):
+        self.open_home_page(wd)
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -104,6 +105,7 @@ class test_add_contact(unittest.TestCase):
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # Submit contact creation
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        self.open_contact_page(wd)
 
     def open_contact_page(self, wd):
         wd.find_element_by_link_text("home").click()
@@ -113,26 +115,22 @@ class test_add_contact(unittest.TestCase):
 
     def test_add_contact(self):
         wd = self.wd
-        self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.create_contact(wd, Contact(firstname="Sergey", middlename="Anatolevich", lastname="Mekhovsky", nickname="mehovsky",
                             title="title", company="company", address="SPB", home="home", mobile="123", work="work",
                             fax="fax", email="1@mail.ru", email2="2@mail.ru", email3="3@mail.ru", homepage="homepage",
                             bday="20", bmonth="February", byear="1996", aday="5", amonth="March", ayear="2000",
                             address2="SPB", phone2="123", notes="notes"))
-        self.open_contact_page(wd)
         self.logout(wd)
 
     def test_add_empty_contact(self):
         wd = self.wd
-        self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.create_contact(wd, Contact(firstname="", middlename="", lastname="", nickname="",
                             title="", company="", address="", home="", mobile="", work="",
                             fax="", email="", email2="", email3="", homepage="",
                             bday="", bmonth="-", byear="", aday="", amonth="-", ayear="",
                             address2="", phone2="", notes=""))
-        self.open_contact_page(wd)
         self.logout(wd)
 
     def tearDown(self):
