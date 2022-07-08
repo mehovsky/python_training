@@ -58,13 +58,13 @@ class test_add_contact(unittest.TestCase):
         wd.find_element_by_name("address").send_keys(contact.address)
         wd.find_element_by_name("home").click()
         wd.find_element_by_name("home").clear()
-        wd.find_element_by_name("home").send_keys(contact.home)
+        wd.find_element_by_name("home").send_keys(contact.home_phone_number)
         wd.find_element_by_name("mobile").click()
         wd.find_element_by_name("mobile").clear()
-        wd.find_element_by_name("mobile").send_keys(contact.mobile)
+        wd.find_element_by_name("mobile").send_keys(contact.mobile_phone_number)
         wd.find_element_by_name("work").click()
         wd.find_element_by_name("work").clear()
-        wd.find_element_by_name("work").send_keys(contact.work)
+        wd.find_element_by_name("work").send_keys(contact.work_phone_number)
         wd.find_element_by_name("fax").click()
         wd.find_element_by_name("fax").clear()
         wd.find_element_by_name("fax").send_keys(contact.fax)
@@ -117,7 +117,7 @@ class test_add_contact(unittest.TestCase):
         wd = self.wd
         self.login(wd, username="admin", password="secret")
         self.create_contact(wd, Contact(firstname="Sergey", middlename="Anatolevich", lastname="Mekhovsky", nickname="mehovsky",
-                            title="title", company="company", address="SPB", home="home", mobile="123", work="work",
+                            title="title", company="company", address="SPB", home_phone_number="home", mobile_phone_number="123", work_phone_number="work",
                             fax="fax", email="1@mail.ru", email2="2@mail.ru", email3="3@mail.ru", homepage="homepage",
                             bday="20", bmonth="February", byear="1996", aday="5", amonth="March", ayear="2000",
                             address2="SPB", phone2="123", notes="notes"))
@@ -127,7 +127,7 @@ class test_add_contact(unittest.TestCase):
         wd = self.wd
         self.login(wd, username="admin", password="secret")
         self.create_contact(wd, Contact(firstname="", middlename="", lastname="", nickname="",
-                            title="", company="", address="", home="", mobile="", work="",
+                            title="", company="", address="", home_phone_number="", mobile_phone_number="", work_phone_number="",
                             fax="", email="", email2="", email3="", homepage="",
                             bday="", bmonth="-", byear="", aday="", amonth="-", ayear="",
                             address2="", phone2="", notes=""))
