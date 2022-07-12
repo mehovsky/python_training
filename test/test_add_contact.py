@@ -17,6 +17,6 @@ def test_add_empty_contact(app):
     app.contact.create(Contact(firstname="", middlename="", lastname="", nickname="",
                                title="", company="", address="", home_phone_number="", mobile_phone_number="", work_phone_number="",
                                fax="", email="", email2="", email3="", homepage="",
-                               bday="", bmonth="-", byear="", aday="", amonth="-", ayear="",
+                               bday="-", bmonth="-", byear="", aday="-", amonth="-", ayear="",
                                address2="", phone2="", notes=""))
     app.session.logout()
