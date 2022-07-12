@@ -80,7 +80,7 @@ class ContactHelper:
         wd.find_element_by_name("notes").clear()
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # Submit contact creation
-        wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        wd.find_element_by_name("submit").click()
         self.open_contact_page()
 
     def edit(self, contact):
@@ -157,8 +157,14 @@ class ContactHelper:
         wd.find_element_by_name("notes").clear()
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # Submit contact creation
-        wd.find_element_by_xpath("//input[22]").click()
+        wd.find_element_by_name("update").click()
         self.open_contact_page()
+
+    def delete_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to.alert.accept()
 
     def open_contact_page(self):
         wd = self.app.wd
