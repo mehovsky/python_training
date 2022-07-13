@@ -83,7 +83,7 @@ class ContactHelper:
         wd.find_element_by_name("submit").click()
         self.open_contact_page()
 
-    def edit(self, contact):
+    def edit_first_contact(self, contact):
         wd = self.app.wd
         # Init contact creation
         wd.find_element_by_xpath("//img[@alt='Edit']").click()
@@ -165,6 +165,14 @@ class ContactHelper:
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to.alert.accept()
+        self.open_contact_page()
+
+    def delete_all_contacts(self):
+        wd = self.app.wd
+        wd.find_element_by_id("MassCB").click()
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to.alert.accept()
+        self.open_contact_page()
 
     def open_contact_page(self):
         wd = self.app.wd
