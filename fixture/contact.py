@@ -1,4 +1,5 @@
 from selenium.webdriver.support.ui import Select
+from model.contact import Contact
 
 
 class ContactHelper:
@@ -49,6 +50,12 @@ class ContactHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
+    def change_field_value_2(self, field_name, text):
+        wd = self.app.wd
+        if text is not None:
+            wd.find_element_by_name(field_name).click()
+            Select(wd.find_element_by_name(field_name)).select_by_visible_text(text)
+
     def fill_contact_form(self, contact):
         wd = self.app.wd
         self.change_field_value("firstname", contact.firstname)
@@ -66,11 +73,11 @@ class ContactHelper:
         self.change_field_value("email2", contact.email2)
         self.change_field_value("email3", contact.email3)
         self.change_field_value("homepage", contact.homepage)
-        self.change_field_value("bday", contact.bday)#2
-        self.change_field_value("bmonth", contact.bmonth)#2
+        self.change_field_value_2("bday", contact.bday)
+        self.change_field_value_2("bmonth", contact.bmonth)
         self.change_field_value("byear", contact.byear)
-        self.change_field_value("aday", contact.aday)#2
-        self.change_field_value("amonth", contact.amonth)#2
+        self.change_field_value_2("aday", contact.aday)
+        self.change_field_value_2("amonth", contact.amonth)
         self.change_field_value("ayear", contact.ayear)
         self.change_field_value("address2", contact.address2)
         self.change_field_value("phone2", contact.phone2)
@@ -84,6 +91,17 @@ class ContactHelper:
     def return_to_contact_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home page").click()
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.open_contact_page()
+        contacts = []
+        for element in wd.find_elements_by_name("entry"):
+            td = element.find_elements_by_tag_name("td")
+            lastname = td[1].text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            contacts.append(Contact(lastname=lastname, id=id))
+        return contacts
 
     def count(self):
         wd = self.app.wd
