@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import Select
 from model.contact import Contact
+import re
 
 
 class ContactHelper:
@@ -118,12 +119,9 @@ class ContactHelper:
                 lastname = td[1].text
                 firstname = td[2].text
                 id = element.find_element_by_name("selected[]").get_attribute("value")
-                all_phones = td[5].text.splitlines()
+                all_phones = td[5].text
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
-                                                  home_phone=all_phones[0],
-                                                  mobile_phone=all_phones[1],
-                                                  work_phone=all_phones[2],
-                                                  second_phone=all_phones[3]))
+                                                  all_phones_from_home_page=all_phones))
         return list(self.contact_cache)
 
     def count(self):
@@ -142,4 +140,15 @@ class ContactHelper:
         mobile_phone = wd.find_element_by_name("mobile").get_attribute("value")
         second_phone = wd.find_element_by_name("phone2").get_attribute("value")
         return Contact(firstname=firstname, lastname=lastname, id=id, home_phone=home_phone, work_phone=work_phone,
+                       mobile_phone=mobile_phone, second_phone=second_phone)
+
+    def get_contact_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_contact_view(index)
+        text = wd.find_element_by_id("content").text
+        home_phone = re.search("H: (.*)", text).group(1)
+        work_phone = re.search("W: (.*)", text).group(1)
+        mobile_phone = re.search("M: (.*)", text).group(1)
+        second_phone = re.search("P: (.*)", text).group(1)
+        return Contact(home_phone=home_phone, work_phone=work_phone,
                        mobile_phone=mobile_phone, second_phone=second_phone)
