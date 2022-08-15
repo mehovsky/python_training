@@ -31,10 +31,12 @@ class ContactHelper:
 
     def open_contact_to_edit(self, index):
         wd = self.app.wd
+        self.open_contact_page()
         wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
 
     def open_contact_view(self, index):
         wd = self.app.wd
+        self.open_contact_page()
         wd.find_elements_by_xpath("//img[@alt='Details']")[index].click()
 
     def delete_contact(self, index):
@@ -120,8 +122,11 @@ class ContactHelper:
                 firstname = td[2].text
                 id = element.find_element_by_name("selected[]").get_attribute("value")
                 all_phones = td[5].text
+                address = td[3].text
+                all_mails = td[4].text
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
-                                                  all_phones_from_home_page=all_phones))
+                                                  all_phones_from_home_page=all_phones, address=address,
+                                                  all_mails_from_home_page=all_mails))
         return list(self.contact_cache)
 
     def count(self):
@@ -139,8 +144,13 @@ class ContactHelper:
         work_phone = wd.find_element_by_name("work").get_attribute("value")
         mobile_phone = wd.find_element_by_name("mobile").get_attribute("value")
         second_phone = wd.find_element_by_name("phone2").get_attribute("value")
+        address = wd.find_element_by_name("address").get_attribute("value")
+        mail1 = wd.find_element_by_name("email").get_attribute("value")
+        mail2 = wd.find_element_by_name("email2").get_attribute("value")
+        mail3 = wd.find_element_by_name("email3").get_attribute("value")
         return Contact(firstname=firstname, lastname=lastname, id=id, home_phone=home_phone, work_phone=work_phone,
-                       mobile_phone=mobile_phone, second_phone=second_phone)
+                       mobile_phone=mobile_phone, second_phone=second_phone,
+                       address=address, email=mail1, email2=mail2, email3=mail3)
 
     def get_contact_from_view_page(self, index):
         wd = self.app.wd
