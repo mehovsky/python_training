@@ -31,7 +31,7 @@ def merge_phones(contact):
     return "\n".join(filter(lambda x: x != "",
                             map(lambda x: clear(x),
                                 filter(lambda x: x is not None,
-                                       [contact.home_phone_number, contact.work_phone_number, contact.mobile_phone_number, contact.phone2]))))
+                                       [contact.home_phone_number, contact.mobile_phone_number, contact.work_phone_number, contact.phone2]))))
 
 
 def merge_emails(contact):
