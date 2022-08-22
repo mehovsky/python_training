@@ -1,4 +1,5 @@
 from model.group import Group
+from timeit import timeit
 
 
 def test_group_list(app, db):
