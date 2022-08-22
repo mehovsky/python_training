@@ -29,10 +29,30 @@ class ContactHelper:
         self.return_to_contact_page()
         self.contact_cache = None
 
+    def edit_contact_by_id(self, new_contact_data, id):
+        wd = self.app.wd
+        self.open_contact_page()
+        self.open_contact_to_edit_by_id(id)
+        self.fill_contact_form(new_contact_data)
+        # Submit contact update
+        wd.find_element_by_name("update").click()
+        self.return_to_contact_page()
+        self.contact_cache = None
+
     def open_contact_to_edit(self, index):
         wd = self.app.wd
         self.open_contact_page()
         wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
+
+    def open_contact_to_edit_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//div[3]/ul/li[1]/a").click()
+        for element in wd.find_elements_by_name("entry"):
+            cells = element.find_elements_by_tag_name("td")
+            cell_id = cells[0].find_element_by_tag_name("input").get_attribute("value")
+            if cell_id == id:
+                cells[7].click()
+                break
 
     def open_contact_view(self, index):
         wd = self.app.wd
@@ -51,6 +71,19 @@ class ContactHelper:
     def select_contact(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
+
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.open_contact_page()
+        self.select_contact_by_id(id)
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to.alert.accept()
+        self.open_contact_page()
+        self.contact_cache = None
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[id='%s']" % id).click()
 
     def delete_all_contacts(self):
         wd = self.app.wd
@@ -162,3 +195,11 @@ class ContactHelper:
         second_phone = re.search("P: (.*)", text).group(1)
         return Contact(home_phone=home_phone, work_phone=work_phone,
                        mobile_phone=mobile_phone, second_phone=second_phone)
+
+    def change_old_contact_list(self, old_contacts, id, new_data):
+        for item in old_contacts:
+            if item.id == id:
+                item.firstname = new_data.firstname
+                item.lastname = new_data.lastname
+                break
+        return old_contacts
