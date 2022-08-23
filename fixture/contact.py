@@ -203,3 +203,46 @@ class ContactHelper:
                 item.lastname = new_data.lastname
                 break
         return old_contacts
+
+    def get_info_from_contacts_list(self, contacts, key):
+        data_list = []
+        for item in contacts:
+            if key == 'emails':
+                data_list.append(item.all_mails_from_home_page)
+            elif key == 'phones':
+                data_list.append(item.all_phones_from_home_page)
+            elif key == 'lastname':
+                data_list.append(item.lastname)
+            elif key == 'firstname':
+                data_list.append(item.firstname)
+            elif key == 'address':
+                data_list.append(item.address)
+        return data_list
+
+    @staticmethod
+    def clear(s: str):
+        return re.sub("[() -]", "", s)
+
+    def merge_emails(self, contact):
+        return "\n".join(filter(lambda x: x != "",
+                                filter(lambda x: x is not None,
+                                       [contact.email, contact.email2, contact.email3])))
+
+    def merge_emails_from_db(self, contacts):
+        merged_users_email_list = []
+        for item in contacts:
+            merged_users_email_list.append(self.merge_emails(item))
+        return merged_users_email_list
+
+    def merge_phones_from_db(self, contacts):
+        merged_users_phone_list = []
+        for item in contacts:
+            merged_users_phone_list.append(self.merge_phones(item))
+        return merged_users_phone_list
+
+    def merge_phones(self, contact):
+        return "\n".join(filter(lambda x: x != "",
+                                map(lambda x: ContactHelper.clear(x),
+                                    filter(lambda x: x is not None,
+                                           [contact.home_phone_number, contact.mobile_phone_number,
+                                            contact.work_phone_number, contact.phone2]))))
