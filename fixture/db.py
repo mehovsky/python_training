@@ -1,6 +1,7 @@
 import pymysql.cursors
 from model.group import Group
 from model.contact import Contact
+from model.contact_in_group import ContactInGroup
 
 
 class DbFixture:
@@ -39,3 +40,16 @@ class DbFixture:
         finally:
             cursor.close()
         return list
+
+    def get_contact_in_group_list(self):
+        contact_list = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute(
+                "select id, group_id from address_in_groups where deprecated is Null")
+            for row in cursor:
+                (user_id, group_id) = row
+                contact_list.append(ContactInGroup(id=str(user_id), group_id=str(group_id)))
+        finally:
+            cursor.close()
+        return contact_list

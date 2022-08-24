@@ -113,3 +113,7 @@ class GroupHelper:
                     item.name = new_data.name
                     break
             return old_groups
+
+    def select_group(self, text, group_id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("select[name='%s'" % text + "]>option[value='%s']" % group_id.id).click()

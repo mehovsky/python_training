@@ -246,3 +246,32 @@ class ContactHelper:
                                     filter(lambda x: x is not None,
                                            [contact.home_phone_number, contact.mobile_phone_number,
                                             contact.work_phone_number, contact.phone2]))))
+
+    def choose_filter_on_home_page(self, key):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//div[3]/ul/li[1]/a").click()
+        Select(wd.find_element_by_name("group")).select_by_visible_text('%s' % key)
+
+    def add_contact_to_group(self, user_id, group_id):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//div[3]/ul/li[1]/a").click()
+        Select(wd.find_element_by_name("group")).select_by_visible_text('[none]')
+        self.select_contact_by_id(user_id)
+        self.app.group.select_group("to_group", group_id)
+        wd.find_element_by_xpath("(//input[@value='Add to'])").click()
+        self.back_home_page()
+
+    def delete_contact_from_group(self, user, group):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//div[3]/ul/li[1]/a").click()
+        self.app.group.select_group("group", group)
+        self.select_contact_by_id(user)
+        wd.find_element_by_name("remove")
+        wd.find_element_by_name("remove").click()
+        wd.find_element_by_css_selector("div.msgbox")
+        wd.find_element_by_link_text("home").click()
+
+    def back_home_page(self):
+        wd = self.app.wd
+        if not (wd.current_url.endswith("addressbook/") and len(wd.find_element_by_name("to_group")) > 0):
+            wd.find_element_by_link_text("home").click()
