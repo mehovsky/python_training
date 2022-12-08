@@ -5,18 +5,18 @@ from model.contact_in_group import ContactInGroup
 
 
 def test_add_contact_to_group(app, db, orm):
-    #app.contact.choose_filter_on_home_page(key='[none]')
     if len(db.get_group_list()) == 0:
         app.group.create(Group(name="test"))
-    if len(db.get_contact_list()) == 0:
+    old_groups = db.get_group_list()
+    group = random.choice(old_groups)
+    old_contacts = orm.get_contacts_in_groups(group)
+    contacts = [contact for contact in orm.get_contacts_not_in_groups(group)
+                if contact not in old_contacts]
+    if len(db.get_contact_list()) == 0 or len(contacts) == 0:
         app.contact.create(Contact(firstname="Sergey"))
-        #app.contact.choose_filter_on_home_page(key='[none]')
-    old_list_contacts = db.get_contact_in_group_list()
-    groups_list = db.get_group_list()
-    group = random.choice(groups_list)
-    contacts_list = orm.get_contacts_not_in_groups(group)
-    user = random.choice(contacts_list)
-    app.contact.add_contact_to_group(user.id, group)
-    new_list_user_in_group = db.get_contact_in_group_list()
-    old_list_contacts.append(ContactInGroup(id=user.id))
-    assert sorted(old_list_contacts, key=ContactInGroup.id_max) == sorted(new_list_user_in_group, key=ContactInGroup.id_max)
+    contacts = orm.get_contacts_not_in_groups(group)
+    contact = random.choice(contacts)
+    app.contact.add_contact_to_group(contact.id, group)
+    new_contacts = orm.get_contacts_in_groups(group)
+    old_contacts.append(contact)
+    assert sorted(old_contacts, key=ContactInGroup.id_max) == sorted(new_contacts, key=ContactInGroup.id_max)
